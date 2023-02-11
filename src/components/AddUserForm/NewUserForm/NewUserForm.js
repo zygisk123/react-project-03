@@ -7,25 +7,16 @@ const NewUserForm = (props) =>
 {
     const [enteredUsername, setEnteredUsername] = useState('');
     const [enteredAge, setEnteredAge] = useState('');
-    const [usernameIsValid, setUsernameIsValid] = useState(true);
-    const [ageIsValid, setAgeIsValid] = useState(true);
+    const [error, setError] = useState();
 
     const titleChangeHandler = (event) =>
     {
         setEnteredUsername(event.target.value);
-        if (event.target.value.trim().length > 0)
-        {
-            setUsernameIsValid(true);
-        }
     }
 
     const ageChangeHandler = (event) =>
     {
         setEnteredAge(event.target.value);
-        if (event.target.value.trim().length > 0)
-        {
-            setAgeIsValid(true);
-        }
     }
 
     const userFormSubmitHandler = (event) =>
@@ -34,14 +25,20 @@ const NewUserForm = (props) =>
         if (enteredUsername.trim().length === 0 ||
             enteredAge.trim().length === 0)
         {
+            setError({
+                title: "Invalid input",
+                message: 'Please enter a valid name and age (non-empty values)'
+            });
             return;
-            setUsernameIsValid(false);
         }
 
         if (+enteredAge < 1)
         {
-            return
-            setAgeIsValid(false);
+            setError({
+                title: "Invalid input",
+                message: 'Please enter a valid age (> 0)'
+            });
+            return;
         }
 
         const userData = 
@@ -52,29 +49,26 @@ const NewUserForm = (props) =>
         }
         setEnteredUsername('');
         setEnteredAge('');
-        props.onFormSubmitHandler(userData);
+        props.onFormSubmit(userData);
+    }
+
+    const errorHandler = () =>
+    {
+        setError(null);
     }
 
     return(
         <div>
-            <ErrorModal title="Error" message="Something went wrong"/>
+            {error && <ErrorModal title={error.title} message={error.message} onConfirm={errorHandler}/>}
             <Card className={style.input}>
                 <form onSubmit={userFormSubmitHandler}>
-                    <div className={style['new-user__controls']}>
-                        <div className={`${style['new-user__control']} ${!usernameIsValid && style.invalid}`}>
-                            <label htmlfor='username'>Username</label>
-                            <input id='username' type = "text" value={enteredUsername} onChange={titleChangeHandler}/>
-                        </div>
-                        <div className={`${style['new-user__control']} ${!ageIsValid && style.invalid}`} >
-                            <label htmlFor="age">Age</label>
-                            <input id='age' type = "number"  step="1" value={enteredAge} onChange={ageChangeHandler}/>
-                        </div>
-                        <div className={style['new-user_actions']}>
-                            <Button type="submit">
-                                Add User
-                            </Button>
-                        </div>
-                    </div>
+                    <label htmlFor='username'>Username</label>
+                    <input id='username' type = "text" value={enteredUsername} onChange={titleChangeHandler}/>
+                    <label htmlFor="age">Age</label>
+                    <input id='age' type = "number"  step="1" value={enteredAge} onChange={ageChangeHandler}/>
+                    <Button type="submit">
+                        Add User
+                    </Button>
                 </form>
             </Card>
         </div>

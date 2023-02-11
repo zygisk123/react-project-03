@@ -1,5 +1,5 @@
 import './App.css';
-import NewUser from "./components/AddUserForm/NewUser/NewUser";
+import NewUser from "./components/AddUserForm/NewUserForm/NewUserForm";
 import Users from "./components/UsersList/Users/Users";
 import React, {useState} from 'react';
 
