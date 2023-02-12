@@ -1,7 +1,7 @@
 import './App.css';
 import NewUser from "./components/AddUserForm/NewUserForm/NewUserForm";
 import Users from "./components/UsersList/Users/Users";
-import React, {useState} from 'react';
+import React, {useState, Fragment} from 'react';
 
 function App() {
 
@@ -17,10 +17,10 @@ function App() {
   }
 
   return (
-    <div>
+    <Fragment>
       <NewUser onFormSubmit={getUserData}/>
       <Users users={users}/>
-    </div>
+    </Fragment>
   );
 }
 
